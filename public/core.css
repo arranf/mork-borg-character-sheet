@@ -1,0 +1,235 @@
+
+
+/** RESET **/
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+   scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:root {
+  --black: #000;
+  --white: #fff;
+  --yellow: rgb(255, 232, 44);
+  --pink: rgb(241, 66, 175);
+  --red: rgb(255, 44, 44);
+}
+
+/* Core */
+h2 {
+	font-family: 'adhesive-nr-seven', serif;
+  font-size: 2em;
+  line-height: 1.4;
+	font-weight: 600;
+}
+
+@media(max-width: 850px) {
+  h2 {
+    margin-bottom: 1rem;
+  }
+}
+
+body {
+  font-family: 'calling-code', sans-serif;
+  background-color: #000;
+  color: #fff;
+}
+
+
+label {
+  font-weight: 700;
+  text-decoration: underline dashed;
+  margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+strong {
+  font-weight: 400;
+}
+
+input, textarea, select {
+  background: transparent;
+  font: inherit;
+  color: inherit;
+
+  border-style: dashed;
+  border-color: var(--yellow);
+
+  border-width: 2px;
+}
+
+textarea, .dice-text {
+	font-family: 'Nothing You Could Do', serif;
+  font-weight: 400;
+}
+
+input:invalid {
+  border-color: var(--red);
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+	font-family: 'Nothing You Could Do', serif;
+  font-weight: 400;
+
+  padding: 0.2rem;
+}
+
+option {
+  background-color: var(--yellow);
+  color: var(--black);
+
+  outline-style: dashed;
+  outline-color: var(--black);
+  outline-width: 2px;
+	
+  font-family: 'Nothing You Could Do', serif;
+  font-weight: 400;
+  
+  padding: 0.2rem;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+input:focus, textarea:focus, select:focus, select:active, option:focus, .link-button:focus {
+  background-color: transparent;
+  outline: none;
+  box-shadow: none;
+  border-color: var(--white);
+  border-style: dashed;
+  border-width: 2px;
+}
+
+textarea {
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+main {
+  padding: 10px;
+}
+
+.pink-form {
+  border-color: var(--pink);
+}
+
+.white-form {
+  border-color: var(--white);
+}
+
+.white-form:focus {
+  border-color: var(--yellow);
+}
+
+.link-button {
+  display: inline;
+  padding: 0;
+  border-color: transparent;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  background: transparent;
+  color: currentColor;
+
+  -webkit-appearance: none;
+}
+
+.link-button:focus {
+  border-color: var(--yellow);
+}
+
+.pink {
+  color: var(--pink);
+}
+
+.yellow {
+  color: var(--yellow);
+}
+
+.mt-1 {
+  margin-top: 0.5rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+
+.hidden {
+  visibility: hidden;
+}
