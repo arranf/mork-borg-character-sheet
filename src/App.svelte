@@ -1,5 +1,10 @@
 <script lang="ts">
+  import axios from "axios";
+
   import { onMount } from "svelte";
+  import RollButton from "./RollButton.svelte";
+  import Loading from "./Loading.svelte";
+
   interface Character {
     version: number;
     name: string;
@@ -111,6 +116,23 @@
     );
   }
 
+  function formulaFromStat(stat: string) {
+    if (!stat) {
+      return "d20";
+    }
+    return `d20${stat.startsWith("-") ? "" : "+"}${stat}`;
+  }
+
+  async function sendChazzRequest(roll: { formula: string; source: string }) {
+    const url = "https://chazz.arranfrance.com";
+    // const url = "http://localhost:8080";
+    const response = await axios.post(`${url}/api/mork-borg-roll`, {
+      character_name: character.name || "Unknown",
+      roll,
+    });
+    // TODO: error handling
+  }
+
   // Lifecycle
   onMount(async () => {
     loading = true;
@@ -123,32 +145,7 @@
   <section class="flex space-between">
     <h1>Mörk Borg: Character Sheet</h1>
 
-    <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
-    <svg
-      class:hidden={!loading}
-      class="pink"
-      width="38"
-      height="38"
-      viewBox="0 0 38 38"
-      xmlns="http://www.w3.org/2000/svg"
-      stroke="currentColor"
-    >
-      <g fill="none" fill-rule="evenodd">
-        <g transform="translate(1 1)" stroke-width="2">
-          <circle stroke-opacity=".5" cx="18" cy="18" r="18" />
-          <path d="M36 18c0-9.94-8.06-18-18-18">
-            <animateTransform
-              attributeName="transform"
-              type="rotate"
-              from="0 18 18"
-              to="360 18 18"
-              dur="1s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </g>
-      </g>
-    </svg>
+    <Loading show={loading} />
   </section>
   {#if character}
     <div>
@@ -233,6 +230,14 @@
               bind:value={character.stats.str}
               on:blur={persist}
             />
+            <RollButton
+              onClick={() => {
+                sendChazzRequest({
+                  formula: formulaFromStat(character.stats.str),
+                  source: "Strength",
+                });
+              }}
+            />
           </div>
           <div class="form-group">
             <label for="agility">Agility</label>
@@ -245,6 +250,14 @@
               pattern="(-?[0-6])?"
               bind:value={character.stats.agi}
               on:blur={persist}
+            />
+            <RollButton
+              onClick={() => {
+                sendChazzRequest({
+                  formula: formulaFromStat(character.stats.agi),
+                  source: "Agility",
+                });
+              }}
             />
           </div>
           <div class="form-group">
@@ -259,6 +272,14 @@
               bind:value={character.stats.pres}
               on:blur={persist}
             />
+            <RollButton
+              onClick={() => {
+                sendChazzRequest({
+                  formula: formulaFromStat(character.stats.pres),
+                  source: "Presence",
+                });
+              }}
+            />
           </div>
           <div class="form-group">
             <label for="toughness">Toughness</label>
@@ -271,6 +292,14 @@
               pattern="(-?[0-6])?"
               bind:value={character.stats.tou}
               on:blur={persist}
+            />
+            <RollButton
+              onClick={() => {
+                sendChazzRequest({
+                  formula: formulaFromStat(character.stats.tou),
+                  source: "Toughness",
+                });
+              }}
             />
           </div>
         </div>
@@ -484,6 +513,12 @@
                 on:blur={persist}
                 bind:value={character.omens}
               />
+              <button
+                class="link-button"
+                on:click={() =>
+                  (character.omens = Math.max(character.omens - 1, 0))}
+                >Spend</button
+              >
             </div>
           </article>
         </section>
@@ -491,6 +526,71 @@
     </div>
   {/if}
 </main>
+<footer>
+  <RollButton
+    text="d2"
+    onClick={() => {
+      sendChazzRequest({
+        formula: "d2",
+        source: "",
+      });
+    }}
+  />
+  <RollButton
+    text="d4"
+    onClick={() => {
+      sendChazzRequest({
+        formula: "d4",
+        source: "",
+      });
+    }}
+  />
+  <RollButton
+    text="d6"
+    onClick={() => {
+      sendChazzRequest({
+        formula: "d6",
+        source: "",
+      });
+    }}
+  />
+  <RollButton
+    text="d8"
+    onClick={() => {
+      sendChazzRequest({
+        formula: "d8",
+        source: "",
+      });
+    }}
+  />
+  <RollButton
+    text="d10"
+    onClick={() => {
+      sendChazzRequest({
+        formula: "d10",
+        source: "",
+      });
+    }}
+  />
+  <RollButton
+    text="d12"
+    onClick={() => {
+      sendChazzRequest({
+        formula: "d12",
+        source: "",
+      });
+    }}
+  />
+  <RollButton
+    text="d20"
+    onClick={() => {
+      sendChazzRequest({
+        formula: "d20",
+        source: "",
+      });
+    }}
+  />
+</footer>
 
 <style>
   main {
@@ -543,6 +643,8 @@
 
   .form-group {
     margin-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .yellow-white {

@@ -218,11 +218,15 @@ main {
   border-color: var(--yellow);
 }
 
-.pink {
+.white-text {
+  color: var(--white);
+}
+
+.pink, .pink-text {
   color: var(--pink);
 }
 
-.yellow {
+.yellow, .yellow-text {
   color: var(--yellow);
 }
 
@@ -236,4 +240,9 @@ main {
 
 .hidden {
   visibility: hidden;
+}
+
+footer > 
+.link-button:focus {
+  border-color: var(--pink);
 }
