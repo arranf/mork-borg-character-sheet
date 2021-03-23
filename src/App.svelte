@@ -20,6 +20,8 @@
     armour: { die: string; name: string };
     items: { name: string }[];
     powers: { name: string }[];
+    powerUses: number;
+    omens: number;
   }
 
   let character: Character;
@@ -28,7 +30,6 @@
 
   let currentItem;
   let currentPower;
-  let omenCount;
 
   const dice = ["", "d2", "d4", "d6", "d8", "d10", "d12"];
   const damageReductionDice = ["", "-d2", "-d4", "-d6"];
@@ -48,6 +49,38 @@
   const clear = (): void => {
     localStorage.removeItem("character");
     character = getCharacter();
+  };
+
+  const addPower = () => {
+    character.powers = [...character.powers, { name: currentPower }];
+    currentPower = "";
+    persist();
+  };
+
+  const addItem = () => {
+    character.items = [...character.items, { name: currentItem }];
+    currentItem = "";
+    persist();
+  };
+
+  const removePower = (power: { name: string }) => {
+    const index = character.powers.indexOf(power);
+    if (index === -1) {
+      return;
+    }
+    character.powers.splice(index, 1);
+    character.powers = [...character.powers];
+    persist();
+  };
+
+  const removeItem = (item: { name: string }) => {
+    const index = character.items.indexOf(item);
+    if (index === -1) {
+      return;
+    }
+    character.items.splice(index, 1);
+    character.items = [...character.items];
+    persist();
   };
 
   function getCharacter(): Character {
@@ -72,6 +105,8 @@
         armour: { die: { additional: "", die: "" }, name: "" },
         items: [],
         powers: [],
+        powerUses: 0,
+        omens: 0,
       }
     );
   }
@@ -345,13 +380,17 @@
                 autocorrect="off"
                 type="text"
                 on:blur={persist}
+                bind:value={currentItem}
               />
-              <button class="link-button yellow">Add</button>
+              <button class="link-button yellow" on:click={addItem}>Add</button>
             </div>
             <ol>
               {#each character.items as item}
                 <li>
-                  {item}
+                  {item.name}
+                  <button class="link-button" on:click={() => removeItem(item)}
+                    >Remove</button
+                  >
                 </li>
               {/each}
             </ol>
@@ -361,12 +400,38 @@
         <section class="flex column">
           <article>
             <h2><span class="white-black">Powers</span></h2>
+            <header>
+              Presence + <span class="dice-text">d4</span> times per day.
+              <div class="form-group mt-1">
+                <label for="power-uses">Power Uses</label>
+                <input
+                  class="white-form short-input"
+                  class:red-form={character.powerUses === 0}
+                  name="power-uses"
+                  id="power-uses"
+                  autocapitalize="none"
+                  autocorrect="off"
+                  type="text"
+                  on:blur={persist}
+                  bind:value={character.powerUses}
+                />
+
+                <button
+                  class="link-button"
+                  on:click={() =>
+                    (character.powerUses = Math.max(
+                      character.powerUses - 1,
+                      0
+                    ))}>Use</button
+                >
+              </div>
+            </header>
             <aside>
               Test presence D12. Fail lose <span class="dice-text">d2</span> HP,
               become dizzy for 1hr.
             </aside>
             <div class="form-group mt-1">
-              <label for="new-item">Power</label>
+              <label for="new-power">Power</label>
               <input
                 class="white-form"
                 name="new-power"
@@ -375,13 +440,18 @@
                 autocorrect="off"
                 type="text"
                 on:blur={persist}
+                bind:value={currentPower}
               />
-              <button class="link-button pink">Add</button>
+              <button class="link-button pink" on:click={addPower}>Add</button>
             </div>
             <ol>
               {#each character.powers as power}
                 <li>
-                  {power}
+                  {power.name}
+                  <button
+                    class="link-button"
+                    on:click={() => removePower(power)}>Remove</button
+                  >
                 </li>
               {/each}
             </ol>
@@ -412,6 +482,7 @@
                 id="omen"
                 autocapitalize="none"
                 on:blur={persist}
+                bind:value={character.omens}
               />
             </div>
           </article>

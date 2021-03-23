@@ -193,6 +193,10 @@ main {
   border-color: var(--white);
 }
 
+.red-form {
+  border-color: var(--red);
+}
+
 .white-form:focus {
   border-color: var(--yellow);
 }
